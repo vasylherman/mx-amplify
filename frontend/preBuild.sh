@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
-echo "Running pre-build tasks..."
+echo "Running pre-build commands..."
 
 NVM_NODE_VERSION="${NVM_NODE_VERSION:-v22}"
 

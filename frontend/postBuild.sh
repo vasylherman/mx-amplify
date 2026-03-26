@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "Running post-build tasks..."
+echo "Running post-build commands..."

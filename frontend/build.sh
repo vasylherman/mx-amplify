@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
-echo "Running build tasks..."
+echo "Running build commands..."
 
 eval "$BUILD_PROJECT_CMD"
 
