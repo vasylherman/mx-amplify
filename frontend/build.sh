@@ -3,7 +3,7 @@ set -euo pipefail
 
 echo "Running build tasks..."
 
-
+eval "$BUILD_CMD"
 
 echo "window.appSettings = {'semver': 'amplify.${AWS_BRANCH}'};" > "./$BUILD_DIR/assets/settings.js"
 echo "{\"amplify\":\"true\",\"commit\":\"${AWS_COMMIT_ID}\",\"semver\":\"${AWS_BRANCH}\"}" > "./$BUILD_DIR/assets/settings.json"
