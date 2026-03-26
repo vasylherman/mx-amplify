@@ -4,7 +4,7 @@ set -euxo pipefail
 echo "Running post-build commands..."
 
 if [ -n "${AWS_PULL_REQUEST_ID:-}" ]; then
-    PREVIEW_URL="https://pr-${AWS_PULL_REQUEST_ID}.${CUSTOM_DOMAIN}/${APP_BASE_PATH}"
+    PREVIEW_URL="https://pr-${AWS_PULL_REQUEST_ID}.${CUSTOM_DOMAIN}/${APP_BASE_PATH:-}"
 
     echo "Posting preview URL to GitLab MR #${AWS_PULL_REQUEST_ID}..."
     curl -fsS --location -X POST "https://gitlab.com/api/v4/projects/$PROJECT_ID/merge_requests/$AWS_PULL_REQUEST_ID/notes" \
