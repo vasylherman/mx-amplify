@@ -3,8 +3,6 @@ set -euxo pipefail
 
 echo "Running post-build commands..."
 
-ATLASSIAN_URL="${ATLASSIAN_URL:-}"
-
 if [ -n "${AWS_PULL_REQUEST_ID:-}" ]; then
     PREVIEW_URL="https://pr-${AWS_PULL_REQUEST_ID}.${CUSTOM_DOMAIN}/${APP_BASE_PATH}"
 
