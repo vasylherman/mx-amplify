@@ -30,3 +30,20 @@ if [ -n "${AWS_PULL_REQUEST_SOURCE_BRANCH:-}" ]; then
 else
     echo "Warning: AWS_PULL_REQUEST_SOURCE_BRANCH is not set. Skipping Jira comment."
 fi
+
+if [[ "${AWS_BRANCH:-}" == prototype-* ]]; then
+    PREVIEW_URL="https://${AWS_BRANCH}.${CUSTOM_DOMAIN}/${APP_BASE_PATH:-}"
+    issue_key=$(echo "$AWS_BRANCH" | grep -oiE "${ISSUE_KEY_PATTERN:-}" || true)
+
+    if [ -n "$issue_key" ]; then
+        echo "Posting preview URL to Jira issue ${issue_key} for prototype branch ${AWS_BRANCH}..."
+        curl -fsS --location -X POST "${ATLASSIAN_URL}/rest/api/2/issue/${issue_key}/comment" \
+            -H "Authorization: Basic $BASE64_AUTH" \
+            -H "Content-Type: application/json" \
+            -d "{\"body\": \"${PREVIEW_URL}\"}"
+    else
+        echo "Warning: No issue key found in branch name '${AWS_BRANCH}' matching pattern '${ISSUE_KEY_PATTERN:-}'. Skipping Jira comment."
+    fi
+else
+    echo "Warning: AWS_BRANCH is not a prototype branch. Skipping prototype Jira comment."
+fi
