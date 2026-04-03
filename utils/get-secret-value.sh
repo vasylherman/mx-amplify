@@ -17,8 +17,12 @@ set -euo pipefail
 
 KEY_NAME="${1:?Usage: get-secret-value.sh <KEY_NAME>}"
 
-aws secretsmanager get-secret-value \
-  --secret-id "$SECRET_ARN" \
-  --region "${AWS_REGION:-us-east-1}" \
-  --query 'SecretString' \
-  --output text | jq -r --arg key "$KEY_NAME" '.[$key]'
+VALUE=$(
+  aws secretsmanager get-secret-value \
+    --secret-id "$SECRET_ARN" \
+    --region "${AWS_REGION:-us-east-1}" \
+    --query 'SecretString' \
+    --output text | jq -re --arg key "$KEY_NAME" '.[$key]'
+) || { echo "ERROR: Key '$KEY_NAME' not found in secret" >&2; exit 1; }
+
+echo "$VALUE"
