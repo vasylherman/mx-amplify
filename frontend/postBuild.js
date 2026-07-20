@@ -48,8 +48,13 @@ const resolveRepo = () => {
 }
 
 const buildJwt = () => {
-  const privateKey = (env.ORG_ROBODEFENSEAI_PRIVATE_KEY || '').replace(/\\n/g, '\n')
-  if (!privateKey) fail('ORG_ROBODEFENSEAI_PRIVATE_KEY is not set')
+  const encoded = (env.ORG_ROBODEFENSEAI_PRIVATE_KEY || '').trim()
+  if (!encoded) fail('ORG_ROBODEFENSEAI_PRIVATE_KEY is not set')
+  // The secret holds the base64-encoded PEM (single line, so Amplify can't mangle its newlines).
+  const privateKey = Buffer.from(encoded, 'base64').toString('utf8')
+  if (!privateKey.includes('-----BEGIN')) {
+    fail('ORG_ROBODEFENSEAI_PRIVATE_KEY did not base64-decode to a PEM private key.')
+  }
 
   const b64url = (input) =>
     Buffer.from(input).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
